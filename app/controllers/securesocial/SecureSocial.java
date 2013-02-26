@@ -194,12 +194,15 @@ public class SecureSocial extends Controller {
      * @see ProviderType
      * @see IdentityProvider
      */
-    public static void authenticate(ProviderType type) {
+    public static void authenticate(String url, ProviderType type) {
         if ( type == null ) {
             Logger.error("Provider type was missing in request");
             // just throw a 404 error
             notFound();
         }
+        if(url!=null)
+            flash.put(ORIGINAL_URL, url);
+
         flash.keep(ORIGINAL_URL);
 
         IdentityProvider provider = ProviderRegistry.get(type);
