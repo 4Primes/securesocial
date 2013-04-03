@@ -200,8 +200,11 @@ public class SecureSocial extends Controller {
             // just throw a 404 error
             notFound();
         }
-        if(url!=null)
-            flash.put(ORIGINAL_URL, url);
+        if (url == null || url.equals("/yetkisiz_erisim")) {
+            flash.put("url", "/");
+        } else {
+            flash.put("url", url);
+        }
 
         flash.keep(ORIGINAL_URL);
 
