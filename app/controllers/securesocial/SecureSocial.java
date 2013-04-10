@@ -15,6 +15,7 @@
 */
 package controllers.securesocial;
 
+import controllers.Secure;
 import play.Logger;
 import play.Play;
 import play.i18n.Messages;
@@ -33,7 +34,7 @@ public class SecureSocial extends Controller {
 
     private static final String USER_COOKIE = "securesocial.user";
     private static final String NETWORK_COOKIE = "securesocial.network";
-    private static final String ORIGINAL_URL = "originalUrl";
+    private static final String ORIGINAL_URL = "url";
     private static final String GET = "GET";
     private static final String ROOT = "/";
     static final String USER = "user";
@@ -200,10 +201,15 @@ public class SecureSocial extends Controller {
             // just throw a 404 error
             notFound();
         }
+
+        if(url == null){
+            url = flash.get(ORIGINAL_URL);
+        }
+
         if (url == null || url.equals("/yetkisiz_erisim")) {
-            flash.put("url", "/");
+            flash.put(ORIGINAL_URL, "/");
         } else {
-            flash.put("url", url);
+            flash.put(ORIGINAL_URL, url);
         }
 
         flash.keep(ORIGINAL_URL);
@@ -225,7 +231,11 @@ public class SecureSocial extends Controller {
             redirect(redirectTo);
         }
         final String redirectTo = Play.configuration.getProperty(SECURESOCIAL_LOGIN_REDIRECT, ROOT);
-        redirect( originalUrl != null ? originalUrl : redirectTo);
+        if (flash.get(ORIGINAL_URL) != null) {
+            originalUrl = flash.get(ORIGINAL_URL);
+            flash.remove(ORIGINAL_URL);
+        }
+        redirect(originalUrl != null ? originalUrl : redirectTo);
     }
 
     /**
