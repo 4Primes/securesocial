@@ -202,7 +202,7 @@ public class SecureSocial extends Controller {
             notFound();
         }
 
-        if(url == null){
+        if (url == null) {
             url = flash.get(ORIGINAL_URL);
         }
 
